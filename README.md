@@ -31,6 +31,6 @@ The Dockerfile contains instructions for building a container with Module 1, bas
 
 The training process for both versions of the model on Patch 7.39, and fine-tuning for 7.40:
 
-<img src="image/train_model_catboost_cpu_no_svd_1.png" width="300" /><img src="image/train_model_catboost_cpu_no_svd_2.png" width="300" />
+<img src="image/train_model_catboost_cpu_no_svd_1.png" width="300"><img src="image/train_model_catboost_cpu_no_svd_2.png" width="300" />
 ![Training schedule without SVD](image/train_model_catboost_cpu_no_svd_1.png)
 ![Schedule of additional training without SVD](image/train_model_catboost_cpu_no_svd_2.png)
