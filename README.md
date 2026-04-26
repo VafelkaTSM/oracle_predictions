@@ -28,3 +28,5 @@ Hint: In the "Streak" field, enter the series of wins in matches over the last 1
 `predict_model_catboost.py` works using the files in the startup directory obtained as a result of work `train_model_catboost_cpu_no_svd.py` or `train_model_catboost_cpu_svd_ppmi.py`. By default, it works for the version without SWD, setting the `coder_no_svd` to `coder_svd_ppmi` switch and specifying in `model.load_model` the filename containing the weights for the SVD-enabled model, you can calculate the accuracy for the SVD version. In the "Streak" field, enter the series of wins in matches over the last 10 days.
 
 The Dockerfile contains instructions for building a container with Module 1, based on a model trained without SVD on the latest Dota 2 patch.
+
+The training process for both versions of the model on Patch 7.39, and fine-tuning for 7.40:
