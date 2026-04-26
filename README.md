@@ -12,12 +12,10 @@
 For a quick start, you can build a Docker image to run the model—complete with a graphical interface—trained on the latest Dota 2 patch (example for Linux):
 ```
 git clone https://github.com/VafelkaTSM/oracle_predictions.git && \
+cd oracle_predictions && \
 sudo docker build -t oracle_predictions . && \
 sudo xhost +local:docker && \
-sudo docker run -it --rm \
-    -e DISPLAY=$DISPLAY \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
-    oracle_prediction
+sudo docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix oracle_predictions
 ```
 Hint: In the "Streak" field, enter the series of wins in matches over the last 10 days.
 
