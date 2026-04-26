@@ -30,7 +30,8 @@ Hint: In the "Streak" field, enter the series of wins in matches over the last 1
 The Dockerfile contains instructions for building a container with Module 1, based on a model trained without SVD on the latest Dota 2 patch.
 
 The training process for both versions of the model on Patch 7.39, and fine-tuning for 7.40:
-
 <img src="image/train_model_catboost_cpu_no_svd_1.png" width="50%"><img src="image/train_model_catboost_cpu_no_svd_2.png" width="50%">
 <img src="image/train_model_catboost_cpu_svd_ppmi_1.png" width="50%"><img src="image/train_model_catboost_cpu_svd_ppmi_2.png" width="50%">
-
+| svd vs no_svd | without svd | with svd ppmi |
+| :---: | :---: | :---: |
+| Accuracy | 57.1% | 56.9% |
