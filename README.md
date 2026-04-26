@@ -7,6 +7,8 @@
 
 **Data**: SVD, PPMI (for hero embeddings)
 
+### Quick start
+
 For a quick start, you can build a Docker image to run the model—complete with a graphical interface—trained on the latest Dota 2 patch (example for Linux):
 ```
 git clone https://github.com/VafelkaTSM/oracle_predictions.git && \
@@ -19,6 +21,8 @@ sudo docker run -it --rm \
 ```
 Hint: In the "Streak" field, enter the series of wins in matches over the last 10 days.
 
+### Module Information
+
 `parser_with_streak.py` is executed with two arguments: the first specifies the start date for retrieving matches, and the second specifies the end date. Dates must be provided in the YYYY-MM-DD format—for example: `python3.14 parser_with_streak.py 2026-03-26 2026-04-26`. Upon completion, the program saves a .pkl file containing the parsed professional match data to the execution directory.
 
 `train_model_catboost_cpu_no_svd.py` and `train_model_catboost_cpu_svd_ppmi.py` train the model using parser output files. They are executed with two arguments: the first specifies the path to the file containing the core training data (e.g., matches from previous patches), while the second specifies the path to the file containing data for fine-tuning (representing the current meta). It is recommended to use files containing at least 4,000 matches each (approximately 1.5 months' worth of data). At the end of the process, the modules save the model and two files containing the encodings for the heroes and teams; these files are essential for operation `predict_model_catboost.py` and `model_gui.py`. The first module simply employs CatBoost, utilizing Optuna to tune the hyperparameters; the second module, in addition to this, first applies feature encoding using PPMI followed by SVD. The first option is recommended, as the second option does not yield a significant increase in accuracy yet is considerably more computationally demanding.
@@ -29,9 +33,12 @@ Hint: In the "Streak" field, enter the series of wins in matches over the last 1
 
 The Dockerfile contains instructions for building a container with Module 1, based on a model trained without SVD on the latest Dota 2 patch.
 
+### Model Analysis
+
 The training process for both versions of the model on Patch 7.39, and fine-tuning for 7.40:
 <img src="image/train_model_catboost_cpu_no_svd_1.png" width="50%"><img src="image/train_model_catboost_cpu_no_svd_2.png" width="50%">
 <img src="image/train_model_catboost_cpu_svd_ppmi_1.png" width="50%"><img src="image/train_model_catboost_cpu_svd_ppmi_2.png" width="50%">
 | svd vs without svd | without svd | with svd ppmi |
 | :---: | :---: | :---: |
 | Accuracy | 57.1% | 56.9% |
+During training, the accuracy on the validation set may be higher due to the application of regularization to the training data.
