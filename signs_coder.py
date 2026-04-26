@@ -9,8 +9,6 @@ def coder_no_svd(df):
     df = df.drop(['radiant_heroes', 'dire_heroes'], axis = 1)
     df = pd.concat([df, radiant_heroes, dire_heroes], axis = 1, ignore_index=True)
     df.columns = (['radiant_team', 'dire_team', 'radiant_streak', 'dire_streak'] + [f'rad_h_{i}' for i in range(5)] + [f'dire_h_{i}' for i in range(5)])
-    rows_with_nan = df[df.isna().any(axis=1)]
-    print(rows_with_nan)
     df['radiant_streak'] = df['radiant_streak'].astype('int64')
     df['dire_streak'] = df['dire_streak'].astype('int64')
     

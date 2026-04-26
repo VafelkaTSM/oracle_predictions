@@ -118,6 +118,8 @@ X_1, Y_1 = shuffle(X_1, Y_1, random_state=42)
 X_2, Y_2 = shuffle(X_2, Y_2, random_state=42)
 X_1, Y_1 = X_1.reset_index(drop=True), Y_1.reset_index(drop=True)
 X_2, Y_2 = X_2.reset_index(drop=True), Y_2.reset_index(drop=True)
+X_1_val, Y_1_val = X_1.iloc[len(X_1) - separator_1:], Y_1.iloc[len(X_1) - separator_1:]
+X_1, Y_1 = X_1.iloc[:len(X_1) - separator_1], Y_1.iloc[:len(X_1) - separator_1]
 X_2_val_end, Y_2_val_end = X_2.iloc[len(X_2) - separator_1:], Y_2.iloc[len(X_2) - separator_1:]
 X_2, Y_2 = X_2.iloc[:len(X_2) - separator_1], Y_2.iloc[:len(X_2) - separator_1]
     
@@ -162,14 +164,14 @@ def objective(trial):
     elif params_2['bootstrap_type'] == 'Bernoulli':
         params_2['subsample'] = trial.suggest_float('subsample_2', 0.1, 1)
 
+    model_1 = CatBoostClassifier(**params_1, silent = True)
+    model_1.fit(X_1, Y_1, eval_set =(X_1_val, Y_1_val))
+
     kf = KFold(n_splits=4, shuffle=True, random_state=42)
     scores = []
     for train_idx, val_idx in kf.split(X_2):
         X_2_tr, Y_2_tr = X_2.iloc[train_idx], Y_2.iloc[train_idx]
         X_2_val, Y_2_val = X_2.iloc[val_idx], Y_2.iloc[val_idx]
-
-        model_1 = CatBoostClassifier(**params_1, silent = True)
-        model_1.fit(X_1, Y_1, eval_set =(X_2_val, Y_2_val))
 
         model_2 = CatBoostClassifier(**params_2, silent = True)
         model_2.fit(X_2_tr, Y_2_tr, eval_set =(X_2_val, Y_2_val), init_model = model_1)
@@ -195,9 +197,9 @@ params_1.update(other_params)
 params_2 = {k[:-2]: params[k] for k in params.keys() if '_2' in k}
 params_2.update(other_params)
 
-model_1 = CatBoostClassifier(**params_1)
-model_1.fit(X_1, Y_1, eval_set=(X_2_val_end, Y_2_val_end))
-model_2 = CatBoostClassifier(**params_2)
+model_1 = CatBoostClassifier(**params_1, train_dir='train_model_catboost_cpu_svd_ppmi_1')
+model_1.fit(X_1, Y_1, eval_set=(X_1_val, Y_1_val))
+model_2 = CatBoostClassifier(**params_2, train_dir='train_model_catboost_cpu_svd_ppmi_2')
 model_2.fit(X_2, Y_2, eval_set=(X_2_val_end, Y_2_val_end), init_model = model_1)
 
 # Saving the model.
